@@ -61,7 +61,8 @@ contract HypercertMinterPausableTest is PRBTest, StdCheats, StdUtils, PausableTe
     }
 
     /// @dev Run Forge with `-vvvv` to see console logs.
-    function testFailInitialize() public {
+    function testRevertWhen_Initialize() public {
+        vm.expectRevert("Initializable: contract is already initialized");
         hypercertMinter.initialize();
     }
 

@@ -23,7 +23,8 @@ contract SemiFungible1155DefaultTest is PRBTest, StdCheats, StdUtils, SemiFungib
     }
 
     /// @dev Run Forge with `-vvvv` to see console logs.
-    function testFailInitialize() public {
+    function testRevertWhen_Initialize() public {
+        vm.expectRevert("Initializable: contract is not initializing");
         semiFungible.__SemiFungible1155_init();
     }
 

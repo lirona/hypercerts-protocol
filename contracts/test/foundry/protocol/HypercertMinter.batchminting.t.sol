@@ -5,6 +5,7 @@ import {PRBTest} from "prb-test/PRBTest.sol";
 import {StdCheats} from "forge-std/StdCheats.sol";
 import {StdUtils} from "forge-std/StdUtils.sol";
 import {HypercertMinter} from "@hypercerts/protocol/HypercertMinter.sol";
+import {Errors} from "@hypercerts/protocol/libs/Errors.sol";
 //solhint-disable-next-line max-line-length
 import {ERC1155HolderUpgradeable} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC1155/utils/ERC1155HolderUpgradeable.sol";
@@ -95,7 +96,7 @@ contract HypercertBatchMintingTest is PRBTest, StdCheats, StdUtils, BatchMinting
 
     // UNHAPPY MINTING
 
-    function testFailBatchMintWrongData() public {
+    function testRevertWhen_BatchMintWrongData() public {
         MerkleDataSet memory one = datasets[0];
         uint256 index = 1;
         address user = one.accounts[index];
@@ -116,13 +117,8 @@ contract HypercertBatchMintingTest is PRBTest, StdCheats, StdUtils, BatchMinting
 
         startHoax(user, 10 ether);
 
+        vm.expectRevert(Errors.Invalid.selector);
         minter.batchMintClaimsFromAllowlists(user, proofs, ids, units);
-
-        for (uint256 i = 0; i < 4; i++) {
-            MerkleDataSet memory dataset = datasets[i];
-            uint256 tokenID = ((i + 1) << 128) + 1;
-            assertEq(minter.unitsOf(user, tokenID), dataset.units[index]);
-        }
     }
 
     // HAPPY MINTING

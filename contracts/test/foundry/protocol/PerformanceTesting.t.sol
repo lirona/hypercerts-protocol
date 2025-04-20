@@ -157,7 +157,8 @@ contract PerformanceTesting is PRBTest, StdCheats, StdUtils, PerformanceTestHelp
     }
 
     /// @dev Run Forge with `-vvvv` to see console logs.
-    function testFail() public {
+    function testRevertWhen_Initialize() public {
+        vm.expectRevert("Initializable: contract is already initialized");
         hypercertMinter.initialize();
     }
 

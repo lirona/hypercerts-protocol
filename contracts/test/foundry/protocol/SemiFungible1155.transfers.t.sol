@@ -23,17 +23,17 @@ contract SemiFungible1155TransferTest is PRBTest, StdCheats, StdUtils {
     }
 
     // UNHAPPY PATHS
-    function testFailTransferTypeIDToken() public {
+    function testRevertWhen_TransferTypeIDToken() public {
         semiFungible.mintValue(alice, 10_000, _uri);
 
-        //NotApprovedOrOWner, since no owner
+        vm.expectRevert("ERC1155: insufficient balance for transfer");
         semiFungible.safeTransferFrom(alice, bob, 1 << 128, 1, "");
     }
 
-    function testFailTransferNonExistingFractionToken() public {
+    function testRevertWhen_TransferNonExistingFractionToken() public {
         semiFungible.mintValue(alice, 10_000, _uri);
 
-        //NotApprovedOrOWner, since no owner
+        vm.expectRevert("ERC1155: insufficient balance for transfer");
         semiFungible.safeTransferFrom(alice, bob, 1 << (128 + 2), 1, "");
     }
 
