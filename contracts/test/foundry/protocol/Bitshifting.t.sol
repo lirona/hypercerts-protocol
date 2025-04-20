@@ -68,6 +68,18 @@ contract BitshiftingTest is PRBTest, StdCheats, StdUtils, Bitshifter {
         assertFalse(isTypedItem(baseID));
     }
 
+    function testNotBaseType() public {
+        uint256 baseID = (1 << 128) + 1;
+        uint256 baseType = getBaseType(baseID);
+        assertNotEq(baseID, baseType);
+        assertEq(baseID, 340_282_366_920_938_463_463_374_607_431_768_211_457);
+
+        assertFalse(isBaseType(baseID));
+        assertEq(getItemIndex(baseID), 1);
+        assertEq(getBaseType(baseID), 340_282_366_920_938_463_463_374_607_431_768_211_456);
+        assertTrue(isTypedItem(baseID));
+    }
+
     function testBaseTypeFuzz(uint256 index) public {
         vm.assume(index > 0);
         uint256 baseType = index << 128;
